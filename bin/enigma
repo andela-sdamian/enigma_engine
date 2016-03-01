@@ -1,0 +1,51 @@
+#!/usr/bin/env ruby
+
+require 'bundler/setup'
+require 'enigma_engine'
+require 'enigma_engine/date_key_helpers'
+require 'enigma_engine/crack'
+require_relative 'help'
+
+case ARGV[0]
+when 'help'
+  show_wait_cursor(3)
+  puts @msg_help
+when 'encrypt'
+  message = ARGV[1]
+  new_file = ARGV[2]
+  if fields_empty?([message, new_file])
+    raise call_error
+  end
+  if files_valid?([message, new_file])
+    EnigmaEngine::Engine.new.encrypt(message, new_file)
+  else
+    raise call_error
+  end
+when 'decrypt'
+  message = ARGV[1]
+  new_file = ARGV[2]
+  key = ARGV[3]
+  date = ARGV[4]
+  if fields_empty?([message, new_file, key, date])
+    raise call_error
+  end
+  if files_valid?([message, new_file]) && key_valid?(key) && date_valid?(date)
+    EnigmaEngine::Engine.new.decrypt(message, new_file, key, date)
+  else
+    raise call_error
+  end
+when 'crack'
+  message = ARGV[1]
+  new_file = ARGV[2]
+  date = ARGV[3]
+  if fields_empty?([message, new_file, date])
+    raise call_error
+  end
+  if files_valid?([message, new_file]) && date_valid?(date)
+    EnigmaEngine::Crack.new.crack(message, new_file, date)
+  else
+    raise call_error
+  end
+else
+  raise call_error
+end
