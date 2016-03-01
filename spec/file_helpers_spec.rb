@@ -1,3 +1,4 @@
+require 'spec_helper'
 require 'enigma_engine/engine'
 describe EnigmaEngine do
   obj = EnigmaEngine::Engine.new

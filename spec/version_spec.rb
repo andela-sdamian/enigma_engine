@@ -1,3 +1,4 @@
+require 'spec_helper'
 require 'enigma_engine/version'
 describe EnigmaEngine do
   describe 'VERSION' do

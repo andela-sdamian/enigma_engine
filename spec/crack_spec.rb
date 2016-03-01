@@ -1,3 +1,4 @@
+require 'spec_helper'
 require 'enigma_engine/crack'
 describe EnigmaEngine::Crack do
   obj = EnigmaEngine::Crack.new
@@ -55,6 +56,12 @@ describe EnigmaEngine::Crack do
       res = obj.handle_get_target([%w(x 8 w t), %w(t j 4 2)], {})
       it 'should return' do
         expect(res).to eql({target:%w(t j 4 2), weakness:%w(n d . .)})
+      end
+    end
+    context "#{prefix} of 3 elements" do
+      res = obj.handle_get_target([%w(x 8 w t), %w(t j 4)], {})
+      it 'should return' do
+        expect(res).to eql({weakness:%w(. . e n)})
       end
     end
   end
