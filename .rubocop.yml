@@ -1,0 +1,9 @@
+# This is the configuration used to check the rubocop source code.
+
+AllCops:
+  Exclude:
+    - 'spec/*'
+    - 'lib/enigma_engine/version.rb'
+    - 'enigma_engine.gemspec'
+  TargetRubyVersion: 2.2
+
