@@ -2,7 +2,7 @@
 
 require 'bundler/setup'
 require 'enigma_engine'
-require 'enigma_engine/date_key_helpers'
+require_relative 'console_helpers'
 require 'enigma_engine/crack'
 require_relative 'help'
 
@@ -16,6 +16,7 @@ when 'encrypt'
   if fields_empty?([message, new_file])
     raise call_error
   end
+
   if files_valid?([message, new_file])
     EnigmaEngine::Engine.new.encrypt(message, new_file)
   else
@@ -29,6 +30,7 @@ when 'decrypt'
   if fields_empty?([message, new_file, key, date])
     raise call_error
   end
+
   if files_valid?([message, new_file]) && key_valid?(key) && date_valid?(date)
     EnigmaEngine::Engine.new.decrypt(message, new_file, key, date)
   else
@@ -41,6 +43,7 @@ when 'crack'
   if fields_empty?([message, new_file, date])
     raise call_error
   end
+
   if files_valid?([message, new_file]) && date_valid?(date)
     EnigmaEngine::Crack.new.crack(message, new_file, date)
   else

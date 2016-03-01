@@ -21,9 +21,6 @@ describe EnigmaEngine do
     it 'should have method yellow' do
       expect(obj.respond_to?('yellow')).to eql(true)
     end
-    it 'should have method call_error' do
-      expect(obj.respond_to?('call_error')).to eql(true)
-    end
     it 'should have method files_valid?' do
       expect(obj.respond_to?('files_valid?')).to eql(true)
     end

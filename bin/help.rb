@@ -1,4 +1,4 @@
-require 'enigma_engine/date_key_helpers'
+require_relative'console_helpers'
 
 def show_wait_cursor(seconds, fps = 10)
   chars = %w(| / - \\)
@@ -28,7 +28,7 @@ show_wait_cursor(3)
 Intro
 ====================================
 Hello there, welcome to the EnigmaEngine! This program simulates the Enigma Machine used in World War II by the Germans.
-Find out more on "#{yellow('https://github.com/andela-sdamian/EnigmaEngine')}"
+Find out more on "#{yellow('https://github.com/andela-sdamian/enigma_engine')}"
 
 Usage
 ====================================

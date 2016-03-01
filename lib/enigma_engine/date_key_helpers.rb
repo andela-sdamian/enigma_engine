@@ -25,12 +25,6 @@ module EnigmaEngine
       colorize(text, 33)
     end
 
-    def call_error
-      puts red('Arguments error!')
-      puts yellow('Run [enigma help] for more info...')
-      exit
-    end
-
     def files_valid?(arr)
       arr.all? { |i| i[-4, 4] == '.txt' }
     end
