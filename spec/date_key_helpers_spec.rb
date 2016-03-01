@@ -45,4 +45,55 @@ describe EnigmaEngine do
     end
   end
 
+  describe '.colorize' do
+    context 'given a string' do
+      it 'should change the color of a text' do
+        expect(obj.colorize('hello', 32)).to eql("\e[32mhello\e[0m")
+      end
+    end
+  end
+
+  describe '.date_valid?' do
+    context 'given a date' do
+      it 'should return true for date in the format DDMMYY' do
+        expect(obj.date_valid?('010316')).to eql(true)
+      end
+      it 'should return false for an invalid date'do
+        expect(obj.date_valid?('01031')).to eql(false)
+      end
+    end
+  end
+
+  describe '.key_valid?' do
+    context 'given a key' do
+      it 'should return true for a valid key e.g. 41521' do
+        expect(obj.key_valid?('41521')).to eql(true)
+      end
+      it 'should return false for an invalid key e.g. 4152' do
+        expect(obj.key_valid?('4152')).to eql(false)
+      end
+    end
+  end
+
+  describe '.files_valid?' do
+    context 'given an array of files' do
+      it 'should return true for valid files' do
+        expect(obj.files_valid?(%w(a.txt b.txt c.txt))).to eql(true)
+      end
+      it 'should return false for invalid file' do
+        expect(obj.files_valid?(%w(a.txt b.txt c.exe))).to eql(false)
+      end
+    end
+  end
+
+  describe '.fields_empty?' do
+    context 'given an array of fields' do
+      it 'should return true if array contains empty elements' do
+        expect(obj.fields_empty?(['', 'hello', 'world'])).to eql(true)
+      end
+      it 'should return false if an array does not contain empty elements' do
+        expect(obj.fields_empty?(%w(puts hello world))).to eql(false)
+      end
+    end
+  end
 end

@@ -44,7 +44,7 @@ module EnigmaEngine
     end
 
     def fields_empty?(arr)
-      arr.include? 32.chr
+      arr.include? ''
     end
   end
 end
