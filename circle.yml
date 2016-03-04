@@ -1,6 +1,8 @@
 machine:
   ruby:
     version: 2.2.3
+  environment:
+    CODECLIMATE_REPO_TOKEN: 814c8a455cea05a77c8c3b6ef8bed192086c5354212abac3af7b5a9c87ca7fa2
 dependencies:
   pre:
     - gem install bundler -v 1.11.2
