@@ -1,9 +1,5 @@
 require 'spec_helper'
 require 'enigma_engine/version'
-describe EnigmaEngine do
-  describe 'VERSION' do
-    it 'should equals' do
-      expect(EnigmaEngine::VERSION).to eql('0.1.0')
-    end
-  end
+describe EnigmaEngine::VERSION do
+  subject { expect(EnigmaEngine::VERSION).to eq '0.1.0' }
 end
