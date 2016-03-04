@@ -53,31 +53,25 @@ module EnigmaEngine
     end
 
     def encrypt(file, new_file)
-      @key = rand_key
-      @date = today
-      message = text_to_array(open_file(file))
-      encrypted_chars = []
-      message.each do |row|
-        row.each_with_index do |item, index|
-          rotated = handle_rotation(index, item, method(:encrypt_char))
-          encrypted_chars.push(rotated)
-        end
-      end
-      create_write_file(encrypted_chars.join(''), new_file, @key, date, true)
+      process_file(file, new_file, :encrypt_char, true)
     end
 
     def decrypt(file, new_file, key, date)
-      @key = key
-      @date = date
+      process_file(file, new_file, :decrypt_char, key, date)
+    end
+
+    def process_file(file, new_file, method, key = nil, date = nil, type = false)
+      @key = key.nil? ? rand_key : key
+      @date = date.nil? ? today : date
       message = text_to_array(open_file(file))
-      decrypted_chars = []
+      return_chars = []
       message.each do |row|
         row.each_with_index do |item, index|
-          reversed = handle_rotation(index, item, method(:decrypt_char))
-          decrypted_chars.push(reversed)
+          rot = handle_rotation(index, item, method(method))
+          return_chars.push(rot)
         end
       end
-      create_write_file(decrypted_chars.join(''), new_file, key, date)
+      create_write_file(return_chars.join(''), new_file, key, date)
     end
   end
 end
