@@ -5,11 +5,11 @@ module EnigmaEngine
       if File.exist? file
         data = file.read
         data.gsub(/\n/, ' ')
-      end
-    rescue
-      raise <<NOTIFY
+      else
+        raise <<NOTIFY
 "Cannot find file, Run [enigma help] to see help!"
 NOTIFY
+      end
     end
 
     def create_write_file(txt, file_name, key, date, type = false)

@@ -9,7 +9,9 @@ describe EnigmaEngine::FileHelpers do
 
   describe '#open_file' do
     file = "#{dir}message.txt"
+    err = "#{dir}error.txt"
     it { expect(subject.open_file(file)).not_to be_nil }
+    it { expect(subject.open_file(err)).to raise_error("Cannot find file, Run [enigma help] to see help!") }
   end
 
   describe '#create_write_file' do
