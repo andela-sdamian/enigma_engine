@@ -1,22 +1,23 @@
+require_relative 'engine'
 module EnigmaEngine
-  module Offsets
-    def get_date(index)
+  class Offsets < Engine
+    def Offsets.get_date(index)
       @date[index].to_i
     end
 
-    def a_offset
+    def Offsets.a
       get_date(0)
     end
 
-    def b_offset
+    def Offsets.b
       get_date(1)
     end
 
-    def c_offset
+    def Offsets.c
       get_date(2)
     end
 
-    def d_offset
+    def Offsets.d
       get_date(3)
     end
   end

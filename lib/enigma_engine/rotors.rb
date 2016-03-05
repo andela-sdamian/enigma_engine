@@ -1,5 +1,6 @@
+require_relative 'engine'
 module EnigmaEngine
-  module Rotors
+  class Rotors < Engine
     def key
       @key
     end
@@ -8,19 +9,19 @@ module EnigmaEngine
       key.to_s.split('')[x, y].join('').to_i
     end
 
-    def a_rotation
+    def Rotors.a
       put_key(0, 2)
     end
 
-    def b_rotation
+    def Rotors.b
       put_key(1, 2)
     end
 
-    def c_rotation
+    def Rotors.c
       put_key(2, 2)
     end
 
-    def d_rotation
+    def Rotors.d
       put_key(3, 2)
     end
   end
