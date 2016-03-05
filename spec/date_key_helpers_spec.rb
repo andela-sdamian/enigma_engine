@@ -33,14 +33,14 @@ describe EnigmaEngine::DateKeyHelpers do
     end
   end
 
-  describe '3files_valid?' do
+  describe '#files_valid?' do
     context 'given an array of files' do
       it { expect(subject.files_valid?(%w(a.txt b.txt c.txt))).to be_truthy }
       it { expect(subject.files_valid?(%w(a.txt b.txt c.exe))).to be_falsey }
     end
   end
 
-  describe '.fields_empty?' do
+  describe '#fields_empty?' do
     context 'given an array of fields' do
       it { expect(subject.fields_empty?(['', 'hello', 'world'])).to be_truthy }
       it{ expect(subject.fields_empty?(%w(puts hello world))).to be_falsey }
