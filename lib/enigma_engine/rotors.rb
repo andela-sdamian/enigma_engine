@@ -1,8 +1,7 @@
-require_relative 'engine'
 module EnigmaEngine
-  class Rotors < Engine
-    def key
-      @key
+  class Rotors
+    def initialize(key)
+      @key = key
     end
 
     def put_key(x, y)
