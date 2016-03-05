@@ -1,22 +1,16 @@
 require 'spec_helper'
 require 'enigma_engine/engine'
-describe EnigmaEngine do
-  describe 'Rotation' do
-    test_class = EnigmaEngine::Engine.new
-    test_class.key = '41521'
-    context 'given a five digit key 41521' do
-      it 'A rotation should be an integer' do
-        expect(test_class.a_rotation).to eql(41)
-      end
-      it 'B rotation should be an integer' do
-        expect(test_class.b_rotation).to eql(15)
-      end
-      it 'C rotation should be an integer' do
-        expect(test_class.c_rotation).to eql(52)
-      end
-      it 'D rotation should be an integer' do
-        expect(test_class.d_rotation).to eql(21)
-      end
-    end
+describe EnigmaEngine::Rotors do
+  subject do
+    obj = EnigmaEngine::Engine.new
+    obj.key = '41521'
+    obj
+  end
+  it { is_expected.to respond_to(:key,:a_rotation, :b_rotation, :c_rotation, :d_rotation)}
+  context 'given a five digit key 41521' do
+    it { expect(subject.a_rotation).to eq 41 }
+    it { expect(subject.b_rotation).to eq 15 }
+    it { expect(subject.c_rotation).to eq 52 }
+    it { expect(subject.d_rotation).to eq 21 }
   end
 end
