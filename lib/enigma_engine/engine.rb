@@ -1,13 +1,11 @@
 require_relative 'rotors'
 require_relative 'offsets'
-require_relative 'file_helpers'
 require_relative 'date_key_helpers'
 
 module EnigmaEngine
   class Engine
     include Rotors
     include Offsets
-    include FileHelpers
     include DateKeyHelpers
 
     attr_writer :date, :key
