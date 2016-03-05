@@ -1,15 +1,11 @@
 require_relative 'rotors'
 require_relative 'offsets'
-require_relative 'file_helpers'
+require_relative 'file_data_store'
 require_relative 'date_key_helpers'
 
 module EnigmaEngine
   class Engine
-    include Rotors
-    include Offsets
-    include FileHelpers
     include DateKeyHelpers
-
     attr_writer :date, :key
     attr_reader :date
 
@@ -41,10 +37,10 @@ module EnigmaEngine
 
     def handle_rotation(index, item, func)
       case index
-      when 0 then func.call(item, a_rotation + a_offset)
-      when 1 then func.call(item, b_rotation + b_offset)
-      when 2 then func.call(item, c_rotation + c_offset)
-      when 3 then func.call(item, d_rotation + d_offset)
+        when 0 then func.call(item, a_rotation + a_offset)
+        when 1 then func.call(item, b_rotation + b_offset)
+        when 2 then func.call(item, c_rotation + c_offset)
+        when 3 then func.call(item, d_rotation + d_offset)
       end
     end
 
