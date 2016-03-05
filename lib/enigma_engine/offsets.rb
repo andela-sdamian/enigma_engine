@@ -3,23 +3,24 @@ module EnigmaEngine
     def initialize(date)
       @date = date
     end
-    def Offsets.get_date(index)
+
+    def get_date(index)
       @date[index].to_i
     end
 
-    def Offsets.a
+    def a
       get_date(0)
     end
 
-    def Offsets.b
+    def b
       get_date(1)
     end
 
-    def Offsets.c
+    def c
       get_date(2)
     end
 
-    def Offsets.d
+    def d
       get_date(3)
     end
   end
