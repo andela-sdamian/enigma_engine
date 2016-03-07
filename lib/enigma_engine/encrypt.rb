@@ -1,8 +1,14 @@
 require_relative 'engine'
 module EnigmaEngine 
   class Encrypt 
-    def self.do(file, new_file)
-      EnigmaEngine::Engine.process_file(file, new_file, :rotate_char, nil, nil, true)
+    def initialize(file, new_file) 
+      @file = file 
+      @new_file = new_file 
+      @encryption = EnigmaEngine::Engine.new(true)
+    end
+    
+    def do
+      @encryption.process_file(@file, @new_file)
     end
   end
 end

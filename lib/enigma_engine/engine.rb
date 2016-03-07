@@ -4,34 +4,43 @@ require_relative 'moves'
 
 module EnigmaEngine
   class Engine
-    def self.rotate_char(char, pos, type = false)
-        pos *= -1 unless type
-        char_map = EnigmaEngine::Characters.char_map
-        char_map_hash = EnigmaEngine::Characters.char_map_hash(pos)
+    
+    def initialize(type = false, key = nil, date = nil)
+        @type = type  
+        @key = key 
+        @date = date
+        @moves = EnigmaEngine::Moves.new(@key, @date)
+        @characters = EnigmaEngine::Characters.new
+        @file_store = EnigmaEngine::FileStore.new  
+    end
+    
+    def rotate_char(char, pos)
+        pos *= -1 unless @type
+        char_map = @characters.char_map
+        char_map_hash = @characters.char_map_hash(pos)
         res = char.chars.map { |c| char_map_hash.fetch(c) }
         res.join('')
     end
     
-    def self.handle_rotation(index, item, func, type)
+    def handle_rotation(index, item) 
       case index
-        when 0 then send(func, item, @moves.a, type)
-        when 1 then send(func, item, @moves.b, type)
-        when 2 then send(func, item, @moves.c, type)
-        when 3 then send(func, item, @moves.d, type)
+        when 0 then send(:rotate_char, item, @moves.a)
+        when 1 then send(:rotate_char, item, @moves.b)
+        when 2 then send(:rotate_char, item, @moves.c)
+        when 3 then send(:rotate_char, item, @moves.d)
       end
     end
   
-    def self.process_file(file, new_file, method, key = nil, date = nil, type = true)
-      @moves = EnigmaEngine::Moves.new(key, date)
-      message = FileStore::to_2d_array(FileStore::open(file))
-      return_chars = []
+    def process_file(file, new_file)
+      message = @file_store.to_2d_array(@file_store.open(file))
+      new_chars = []
       message.each do |row|
         row.each_with_index do |item, index|
-          rot = self.handle_rotation(index, item, method, type)
-          return_chars.push(rot)
+          rot = handle_rotation(index, item)
+          new_chars.push(rot)
         end
       end
-      EnigmaEngine::FileStore.create(return_chars.join(''), new_file, @moves.key, @moves.date)
+      @file_store.create(new_chars.join(''), new_file, @moves.key, @moves.date)
     end
   end
 end
