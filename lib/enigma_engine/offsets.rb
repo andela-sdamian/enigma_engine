@@ -1,27 +1,35 @@
 module EnigmaEngine
   class Offsets
+    attr_reader :date 
     def initialize(date)
-      @date = date
+      @date = date   
     end
-
-    def get_date(index)
-      @date[index].to_i
+     
+    def date_squared
+      date = @date.dup   
+      date.sub!(/^0/, '')
+      date.to_i**2    
     end
-
+    
+    def last_four(index) 
+      @last_four ||= date_squared.to_s.split('')[-4, 4].map(&:to_i)
+      @last_four[index]
+    end
+    
     def a
-      get_date(0)
+      last_four(0)
     end
 
     def b
-      get_date(1)
+      last_four(1)
     end
 
     def c
-      get_date(2)
+      last_four(2)
     end
 
     def d
-      get_date(3)
+      last_four(3)
     end
   end
 end
