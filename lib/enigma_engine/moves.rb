@@ -5,8 +5,8 @@ module EnigmaEngine
     attr_reader :key, :date
     
     def initialize(key, date) 
-      key = (key.nil?) ? rand_key : key 
-      date = (date.nil?) ? today : date 
+      key = rand_key if key.nil?
+      date = today if date.nil?
       @rotation = EnigmaEngine::Rotors.new(key)
       @offset = EnigmaEngine::Offsets.new(date)
       @key, @date = key, date   
