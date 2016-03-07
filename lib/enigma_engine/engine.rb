@@ -12,6 +12,7 @@ module EnigmaEngine
         @moves = EnigmaEngine::Moves.new(@key, @date)
         @characters = EnigmaEngine::Characters.new
         @file_store = EnigmaEngine::FileStore.new  
+        @moves_map = { 0=>@moves.a, 1=>@moves.b, 2=>@moves.c, 3=>@moves.d }
     end
     
     def rotate_char(char, pos)
@@ -22,15 +23,10 @@ module EnigmaEngine
         res.join('')
     end
     
-    def handle_rotation(index, item) 
-      case index
-        when 0 then send(:rotate_char, item, @moves.a)
-        when 1 then send(:rotate_char, item, @moves.b)
-        when 2 then send(:rotate_char, item, @moves.c)
-        when 3 then send(:rotate_char, item, @moves.d)
-      end
+    def handle_rotation(index, item)
+      send(:rotate_char, item, @moves_map[index])
     end
-  
+
     def process_file(file, new_file)
       message = @file_store.to_2d_array(@file_store.open(file))
       new_chars = []
