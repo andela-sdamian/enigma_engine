@@ -7,15 +7,14 @@ module EnigmaEngine
     
     def initialize(type = false, key = nil, date = nil)
         @type = type  
-        @key = key 
-        @date = date
-        @moves = EnigmaEngine::Moves.new(@key, @date)
+        @moves = EnigmaEngine::Moves.new(key, date)
         @characters = EnigmaEngine::Characters.new
-        @file_store = EnigmaEngine::FileStore.new  
-        @moves_map = { 0=>@moves.a, 1=>@moves.b, 2=>@moves.c, 3=>@moves.d }
+        @file_store = EnigmaEngine::FileStore.new
+        @moves_map = { 0=>@moves.a, 1=>@moves.b, 2=>@moves.c, 3=>@moves.d }  
     end
     
     def rotate_char(char, pos)
+        char.downcase!
         pos *= -1 unless @type
         char_map = @characters.char_map
         char_map_hash = @characters.char_map_hash(pos)
@@ -28,9 +27,9 @@ module EnigmaEngine
     end
 
     def process_file(file, new_file)
-      message = @file_store.to_2d_array(@file_store.open(file))
+      file_array = @file_store.to_2d_array(file)
       new_chars = []
-      message.each do |row|
+      file_array.each do |row|
         row.each_with_index do |item, index|
           rot = handle_rotation(index, item)
           new_chars.push(rot)

@@ -2,64 +2,71 @@ require_relative 'engine'
 require_relative 'characters'
 require_relative 'file_store'
 module EnigmaEngine
-  class Crack
-    def handle_get_target(file, res)
-      case file.last.length
-      when 4 then res[:target] = file.last
-                  res[:weakness] = %w(n d . .)
-      when 3 then res[:weakness] = %w(. . e n)
-      when 2 then res[:weakness] = %w(. e n d)
-      when 1 then res[:weakness] = %w(e n d .)
-      end
-      res
+  class Crack 
+    def initialize 
+      @file_store = EnigmaEngine::FileStore.new 
+      @characters = EnigmaEngine::Characters.new 
+      @char_map_with_index = @characters.char_map_with_index
+      @rotation = { 0=>0, 1=>0, 2=>0, 3=>0 }  
     end
-
+    
     def get_target(file)
-      res = {}
-      res[:target] = file[file.length - 2]
-      handle_get_target(file, res)
+      match = {}
+      match[:target] = file[file.length - 2]
+      len = file.last.length 
+      if len == 4 
+        match[:target] = file.last 
+        match[:weakness] = %w(n d . .)
+      elsif len == 3
+        match[:weakness] = %w(. . e n)
+      elsif len == 2 
+        match[:weakness] = %w(. e n d)
+      elsif len == 1 
+        match[:weakness] = %w(e n d .)
+      end
+      match 
     end
-
+    
     def find_key(file)
-      message = FileStore::to_2d_array(FileStore::open(file))
-      char_map_with_index = EnigmaEngine::Characters.char_map_with_index
-      target_char = get_target(message)
-      rotation = {}
-      target_char[:target].each_with_index do |item, index|
-        weakness_pos = char_map_with_index[target_char[:weakness][index]]
-        pos = char_map_with_index[item] - weakness_pos
+      indx = []
+      file_array = @file_store.to_2d_array(file)
+      target_char = get_target(file_array)
+      weakness = target_char[:weakness]
+      targets = target_char[:target]
+      targets.each_with_index do |item, index|
+        weak_pos = @char_map_with_index[weakness[index]] 
+        pos = @char_map_with_index[item] - weak_pos 
         (pos < 0) ? pos += 39 : pos
-        case index
-        when 0 then rotation[:a_rotation] = pos
-        when 1 then rotation[:b_rotation] = pos
-        when 2 then rotation[:c_rotation] = pos
-        when 3 then rotation[:d_rotation] = pos
-        end
+          @rotation[index] = pos 
       end
-      rotation
+      @rotation 
     end
-
-    def handle_crack_rotation(index, item, res, func)
-      case index
-      when 0 then send(func, item, res[:a_rotation])
-      when 1 then send(func, item, res[:b_rotation])
-      when 2 then send(func, item, res[:c_rotation])
-      when 3 then send(func, item, res[:d_rotation])
-      end
+   
+    def handle_crack_rotation(index, item)
+     send(:crack_char, item, @rotation[index])
+    end
+   
+    def crack_char(char, pos)
+        char.downcase!
+        pos *= -1
+        char_map = @characters.char_map
+        char_map_hash = @characters.char_map_hash(pos)
+        res = char.chars.map { |c| char_map_hash.fetch(c) }
+        res.join('')
     end
         
-    def crack(file, new_file, date)
-      res = find_key(file)
-      key = res.values.map(&:to_s).join('')
-      message = FileStore::to_2d_array(FileStore::open(file))
-      cracked_chars = []
-      message.each do |row|
+    def do(file, new_file, date)
+      find_key(file)
+      key = @rotation.values.map(&:to_s).join('') 
+      file_array = @file_store.to_2d_array(file)
+      new_chars = []
+      file_array.each do |row|
         row.each_with_index do |item, index|
-          broken = handle_crack_rotation(index, item, res,:rotate_char)
-          cracked_chars.push(broken)
+          rot = handle_crack_rotation(index, item)
+          new_chars.push(rot)
         end
       end
-      EnigmaEngine::FileStore.create(cracked_chars.join(''), new_file, key, date)
+      @file_store.create(new_chars.join(''), new_file, key, date)
     end
   end
 end
