@@ -28,7 +28,6 @@ module EnigmaEngine
     end
     
     def find_key(file)
-      indx = []
       file_array = @file_store.to_2d_array(file)
       target_char = get_target(file_array)
       weakness = target_char[:weakness]
