@@ -1,44 +1,11 @@
-require_relative 'engine'
 require_relative 'characters'
 require_relative 'file_store'
+require_relative 'cracker'
 module EnigmaEngine
   class Crack 
     def initialize 
       @file_store = EnigmaEngine::FileStore.new 
-      @characters = EnigmaEngine::Characters.new 
-      @char_map_with_index = @characters.char_map_with_index
-      @rotation = { 0=>0, 1=>0, 2=>0, 3=>0 }  
-    end
-    
-    def get_target(file)
-      match = {}
-      match[:target] = file[file.length - 2]
-      len = file.last.length 
-      if len == 4 
-        match[:target] = file.last 
-        match[:weakness] = %w(n d . .)
-      elsif len == 3
-        match[:weakness] = %w(. . e n)
-      elsif len == 2 
-        match[:weakness] = %w(. e n d)
-      elsif len == 1 
-        match[:weakness] = %w(e n d .)
-      end
-      match 
-    end
-    
-    def find_key(file)
-      file_array = @file_store.to_2d_array(file)
-      target_char = get_target(file_array)
-      weakness = target_char[:weakness]
-      targets = target_char[:target]
-      targets.each_with_index do |item, index|
-        weak_pos = @char_map_with_index[weakness[index]] 
-        pos = @char_map_with_index[item] - weak_pos 
-        (pos < 0) ? pos += 39 : pos
-          @rotation[index] = pos 
-      end
-      @rotation 
+      @characters = EnigmaEngine::Characters.new    
     end
    
     def handle_crack_rotation(index, item)
@@ -55,9 +22,11 @@ module EnigmaEngine
     end
         
     def do(file, new_file, date)
-      find_key(file)
-      key = @rotation.values.map(&:to_s).join('') 
-      file_array = @file_store.to_2d_array(file)
+      cracker = EnigmaEngine::Cracker.new
+      res = cracker.find_key(file)
+      @rotation = res[:rot]
+      file_array = res[:file]
+      key = res[:key] 
       new_chars = []
       file_array.each do |row|
         row.each_with_index do |item, index|
