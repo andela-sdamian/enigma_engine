@@ -16,11 +16,4 @@ describe EnigmaEngine::Engine do
     let(:new_char) { subject.handle_rotation(1, 'a') }
     it { expect(new_char).to eql 's' }
   end
-  
-  # describe "#process_file" do 
-    # let(:file) { 'message.txt' }
-    # let(:new_file) { 'encrypted.txt' }
-    # let(:res) { subject.process_file(file, new_file) }
-    # expect(res).to have_received(:process_file).with(file, new_file)
-  # end
 end 
