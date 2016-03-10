@@ -1,5 +1,10 @@
 require 'spec_helper'
-describe EnigmaEngine::Engine do 
+describe EnigmaEngine::Engine do
+  
+  it { is_expected.to respond_to :rotate_char }
+  it { is_expected.to respond_to :handle_rotation }
+  it { is_expected.to respond_to :process_file } 
+  
   subject { EnigmaEngine::Engine.new(false, '81322', '090316') }
   
   describe "#rotate_char" do 
