@@ -1,54 +1,114 @@
 #!/usr/bin/env ruby
-
 require 'bundler/setup'
 require 'enigma_engine'
-require_relative 'console_helpers'
-require 'enigma_engine/crack'
-require_relative 'help'
 
-case ARGV[0]
-when 'help'
-  show_wait_cursor(3)
-  puts @msg_help
-when 'encrypt'
-  message = ARGV[1]
-  new_file = ARGV[2]
-  if fields_empty?([message, new_file])
-    raise call_error
-  end
+class Cli
+ 	def initialize (argv)
+ 		@argv = argv
+ 		argv[0] = :help if argv[0].nil?
+ 		send(argv[0])
+ 	end 
+ 	
+ 	def file 
+ 		validate(@argv[1], :file)
+ 	end 
+ 	
+ 	def new_file 
+ 		validate(@argv[2], :file)
+ 	end 
+ 	
+ 	def encrypt
+ 		puts EnigmaEngine::Encrypt.new.do(file, new_file)
+ 	end 
+ 	
+ 	def decrypt
+ 		key = validate(@argv[3], :key)
+ 		date = validate(@argv[4], :date) 
+ 		puts EnigmaEngine::Decrypt.new(key, date).do(file, new_file)
+ 	end 
+ 	
+ 	def crack
+ 		date = validate(@argv[3], :date)  
+ 		puts EnigmaEngine::Crack.new.do(file, new_file, date)
+ 	end 
+ 	 
+ 	def valid_file?(file)
+      	 (!file.nil?) && (file[-4, 4] == '.txt')   
+    end
 
-  if files_valid?([message, new_file])
-    EnigmaEngine::Engine.new.encrypt(message, new_file)
-  else
-    raise call_error
-  end
-when 'decrypt'
-  message = ARGV[1]
-  new_file = ARGV[2]
-  key = ARGV[3]
-  date = ARGV[4]
-  if fields_empty?([message, new_file, key, date])
-    raise call_error
-  end
+    def valid_key?(key)
+      	key.to_s.length.eql? 5
+    end
 
-  if files_valid?([message, new_file]) && key_valid?(key) && date_valid?(date)
-    EnigmaEngine::Engine.new.decrypt(message, new_file, key, date)
-  else
-    raise call_error
-  end
-when 'crack'
-  message = ARGV[1]
-  new_file = ARGV[2]
-  date = ARGV[3]
-  if fields_empty?([message, new_file, date])
-    raise call_error
-  end
+    def valid_date?(date)
+      	date.to_s.length.eql? 6
+    end
+    
+ 	def validate(value, key)
+ 		if send("valid_#{key.to_s}?", value) 
+ 			value
+ 		else
+ 			puts error_msg(key)
+ 			exit 
+ 		end 
+ 	 end
+ 	 
+	def error_msg(type)
+      msg = { 
+      		 file: "Invalid file format. Must be a .txt file", 
+			 date: "Invalid date format. Use DD/MM/YY",
+		  	 key: "Invalid key. Must be of 5 chracters", 
+		    }
+	 msg[type]	  
+	end
+	 
+ 	def help
+		puts <<HELP
+                                                                 .         .
+8 8888888888   b.             8  8 8888     ,o888888o.          ,8.       ,8.                   .8.
+8 8888         888o.          8  8 8888    8888     `88.       ,888.     ,888.                 .888.
+8 8888         Y88888o.       8  8 8888 ,8 8888       `8.     .`8888.   .`8888.               :88888.
+8 8888         .`Y888888o.    8  8 8888 88 8888              ,8.`8888. ,8.`8888.             . `88888.
+8 888888888888 8o. `Y888888o. 8  8 8888 88 8888             ,8'8.`8888,8^8.`8888.           .8. `88888.
+8 8888         8`Y8o. `Y88888o8  8 8888 88 8888            ,8' `8.`8888' `8.`8888.         .8`8. `88888.
+8 8888         8   `Y8o. `Y8888  8 8888 88 8888   8888888 ,8'   `8.`88'   `8.`8888.       .8' `8. `88888.
+8 8888         8      `Y8o. `Y8  8 8888 `8 8888       .8',8'     `8.`'     `8.`8888.     .8'   `8. `88888.
+8 8888         8         `Y8o.`  8 8888    8888     ,88',8'       `8        `8.`8888.   .888888888. `88888.
+8 888888888888 8            `Yo  8 8888     `8888888P' ,8'         `         `8.`8888. .8'       `8. `88888.
 
-  if files_valid?([message, new_file]) && date_valid?(date)
-    EnigmaEngine::Crack.new.crack(message, new_file, date)
-  else
-    raise call_error
-  end
-else
-  raise call_error
-end
+
+Intro
+====================================
+Hello there, welcome to the EnigmaEngine! This program simulates the Enigma Machine used in World War II by the Germans.
+Find out more on "'https://github.com/andela-sdamian/enigma_engine'"
+
+Usage
+====================================
+1. Encrypting a file
+   `enigma encrypt [file.txt] [new_file.txt]`
+
+2. Decrypting a file
+   `enigma decrypt [encrypted_file.txt] [new_file.txt] [five_digit_key] [date]`
+
+3. Cracking a file
+  `enigma crack [encrypted_file.txt] [new_file.txt] [date]`
+
+All date should be in the format DDMMYY e.g. 020416
+
+AUTHOR
+=====================================
+Copyright (c) 2016 Damian Simon Peter
+----------------------------------------------------------------------
+|Twitter =>  http://twitter.com/damiansimonpete
+|StackOverflow => http://goo.gl/3WIAP4
+|GitHub => http://github.com/andela-sdamian
+|Powered by Andela http://twitter.com/andela
+----------------------------------------------------------------------
+
+HELP
+		 	
+ 	end 
+end 
+
+Cli.new(ARGV) 
+

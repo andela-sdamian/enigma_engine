@@ -1,27 +1,29 @@
 module EnigmaEngine
-  module Rotors
-    def key
-      @key
+  class Rotors
+    attr_reader :key 
+    def initialize(key)
+      @key = key
+    end
+    
+    def get_key(m, n)
+      key = @key.to_s.split('')
+      key[m,n].join('').to_i
+    end
+    
+    def a
+      get_key(0, 2)
     end
 
-    def put_key(x, y)
-      key.to_s.split('')[x, y].join('').to_i
+    def b
+      get_key(1, 2)
     end
 
-    def a_rotation
-      put_key(0, 2)
+    def c
+      get_key(2, 2)
     end
 
-    def b_rotation
-      put_key(1, 2)
-    end
-
-    def c_rotation
-      put_key(2, 2)
-    end
-
-    def d_rotation
-      put_key(3, 2)
+    def d
+      get_key(3, 2)
     end
   end
 end

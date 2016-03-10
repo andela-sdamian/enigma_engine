@@ -1,16 +1,30 @@
 require 'spec_helper'
-require 'enigma_engine/engine'
-describe EnigmaEngine::Rotors do
-  subject do
-    obj = EnigmaEngine::Engine.new
-    obj.key = '41521'
-    obj
-  end
-  it { is_expected.to respond_to(:key,:a_rotation, :b_rotation, :c_rotation, :d_rotation)}
-  context 'given a five digit key 41521' do
-    it { expect(subject.a_rotation).to eq 41 }
-    it { expect(subject.b_rotation).to eq 15 }
-    it { expect(subject.c_rotation).to eq 52 }
-    it { expect(subject.d_rotation).to eq 21 }
-  end
+
+describe EnigmaEngine::Rotors do 
+  subject { EnigmaEngine::Rotors.new('41521') }
+    
+   describe "#get_key" do 
+     let(:get_key) { subject.get_key(0, 2)}
+     it { expect(get_key).to eql 41 }   
+   end
+   
+   describe "#a" do 
+     let(:a) { subject.a }
+     it { expect(a).to eql 41 }
+   end
+   
+   describe "#b" do 
+     let(:b) { subject.b }
+     it { expect(b).to eql 15 }
+   end
+   
+   describe "#c" do 
+     let(:c) { subject.c }
+     it { expect(c).to eql 52 }
+   end
+   
+   describe "#d" do 
+     let(:d) { subject.d }
+     it { expect(d).to eql 21 }
+   end
 end
